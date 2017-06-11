@@ -1,0 +1,62 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strconv"
+	"strings"
+	"syscall"
+
+	"github.com/lenbo-ma/gokits/log"
+)
+
+var (
+	cfg     *Config
+	appName string
+	pid     int
+)
+
+var (
+	configFile  = "config/config.yaml"
+	pidFile     = "log/app.pid"
+	appNameFile = "NAME"
+)
+
+func init() {
+	var _ = os.Mkdir("log", os.ModePerm)
+	bs, err := ioutil.ReadFile(appNameFile)
+	if err != nil {
+		log.Errorf("read appName error, the path is %s, error: %s", appNameFile, err)
+	}
+	appName = strings.Trim(string(bs), "\n")
+}
+
+func writePid() {
+	pid = syscall.Getpid()
+	ioutil.WriteFile(pidFile, []byte(strconv.Itoa(pid)), 0644)
+}
+
+func handleEnd() {
+	os.Remove(pidFile)
+}
+
+func handleReloadSignal() {
+	newConfig := readConfig(false)
+	if newConfig != nil {
+		log.Infof("%s: reload config", appName)
+		cfg = newConfig
+		reloadConfig()
+	}
+}
+
+func main() {
+	flag.Parse()
+	writePid()
+	log.DefaultLogger.SetPrefix(fmt.Sprintf("[%d] [%s]", pid, appName))
+
+	cfg = readConfig(true)
+	defer log.Infof("end")
+	handleApp()
+}

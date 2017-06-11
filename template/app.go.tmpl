@@ -1,0 +1,31 @@
+package main
+
+import (
+	"syscall"
+
+	"github.com/fvbock/endless"
+	"github.com/lenbo-ma/gokits/log"
+	"gopkg.in/gin-gonic/gin.v1"
+)
+
+func handleApp() {
+	gin.SetMode(cfg.Env)
+	route := gin.New()
+	route.Use(gin.Logger())
+	route.Use(gin.Recovery())
+	registRoute(route)
+	server := endless.NewServer(cfg.Address, route)
+	// 捕获进程USR1信号，reloadConfig
+	server.SignalHooks[endless.PRE_SIGNAL][syscall.SIGUSR1] = append(server.SignalHooks[endless.PRE_SIGNAL][syscall.SIGUSR1], func() {
+		handleReloadSignal()
+	})
+
+	if cfg.Env != gin.DebugMode {
+		log.Infof("%s: Listening and serving HTTP on %s", appName, cfg.Address)
+	}
+	err := server.ListenAndServe()
+	if err != nil {
+		handleEnd()
+		log.Errorf("%s", err)
+	}
+}

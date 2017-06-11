@@ -1,0 +1,40 @@
+package main
+
+import (
+	"io/ioutil"
+	"os"
+
+	"github.com/lenbo-ma/gokits/log"
+	yaml "gopkg.in/yaml.v2"
+)
+
+// Config config struct
+type Config struct {
+	Address  string `yaml:"address"`
+	Env      string `yaml:"env"`
+	LogLevel string `yaml:"log_level"`
+}
+
+// readConfig read and parse configFile
+func readConfig(exit bool) *Config {
+	bs, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		log.Errorf("load config file failed, the path is %s", configFile)
+		if exit {
+			os.Exit(1)
+		}
+	}
+	config := &Config{}
+	err = yaml.Unmarshal(bs, config)
+	if err != nil {
+		log.Errorf("unmarshal config failed, %s", err)
+		if exit {
+			os.Exit(1)
+		}
+	}
+	return config
+}
+
+func reloadConfig() {
+	log.DefaultLogger.Level = log.NewLevel(cfg.LogLevel)
+}

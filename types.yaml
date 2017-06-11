@@ -1,0 +1,20 @@
+- Package: main
+  Types:
+    Image:
+     Url: string
+     Width: int32
+     Height: int32
+    UserInfo:
+      Name: string
+      Age: int32
+
+- Package: api
+  Path: "api"
+  Types:
+    Image:
+      Url: string
+      Width: int32
+      Height: int32
+    UserInfo:
+      Name: string
+      Age: int32

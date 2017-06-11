@@ -1,0 +1,3 @@
+address: "127.0.0.1:{{.Port}}"
+env: "debug"
+log_level: "trace"

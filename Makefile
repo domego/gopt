@@ -20,7 +20,7 @@ test_gen_gin_server: install
 	@echo "test gen_gin_server"; \
 	rm -rf test; mkdir test; cd test; \
 	ginpt gen_gin_server -name=testGinServer -port=9100; \
-	cd ../
+	make; bin/testGinServer
 
 # add echo to disable make error
 rebase:

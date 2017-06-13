@@ -3,15 +3,16 @@ package main
 import (
 	"syscall"
 
-	"github.com/fvbock/endless"
+  "github.com/fvbock/endless"
+  "github.com/gin-gonic/gin"
+  "github.com/lenbo-ma/ginkit/middleware"
 	"github.com/lenbo-ma/gokits/log"
-	"gopkg.in/gin-gonic/gin.v1"
 )
 
 func handleApp() {
 	gin.SetMode(cfg.Env)
 	route := gin.New()
-	route.Use(gin.Logger())
+	route.Use(middleware.Logger())
 	route.Use(gin.Recovery())
 	registRoute(route)
 	server := endless.NewServer(cfg.Address, route)

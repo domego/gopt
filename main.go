@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/lenbo-ma/gokits/log"
 	"os"
 	"strings"
+
+	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/lenbo-ma/gokits/log"
 )
 
 const (
@@ -34,6 +36,7 @@ type Command struct {
 }
 
 func init() {
+	genutils.Asset = Asset
 	// 初始化参数值
 	flag.StringVar(&typesFile, "types", "types.yaml", "types config file")
 	flag.StringVar(&appName, "name", "", "gin app name")

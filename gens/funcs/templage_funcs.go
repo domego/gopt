@@ -1,4 +1,4 @@
-package main
+package funcs
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"unicode"
 )
 
-var funcMap = map[string]interface{}{
+var FuncMap = map[string]interface{}{
 	"capitalizeFirst": CapitalizeFirst,
 	"lowerFirst":      LowerFirst,
 	"camel":           Camel,

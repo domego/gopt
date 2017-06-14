@@ -22,6 +22,12 @@ test_gen_gin_server: install
 	ginpt gen_gin_server -name=testGinServer -port=9100; \
 	make; bin/testGinServer
 
+test_gen_types: install
+	@echo "test gen_types"; \
+	rm -rf test; mkdir test; cd test; \
+	ginpt gen_types -types=../types.yaml;
+
+
 # add echo to disable make error
 rebase:
 	git version

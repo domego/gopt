@@ -2,10 +2,10 @@ package genutils
 
 import (
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"os"
 	"strings"
+	"text/template"
 
 	"github.com/lenbo-ma/ginpt/gens/funcs"
 	"github.com/lenbo-ma/gokits/log"
@@ -61,17 +61,27 @@ func CopyFiles(files []string) {
 // GenFiles 根据模板生成内容
 func GenFiles(files []string, model map[string]interface{}) {
 	for _, n := range files {
-		log.Infof("start gen file %s", n)
-		var (
-			bs  []byte
-			err error
-		)
-		if bs, err = Asset(n); err != nil {
-			log.Fatalf("%s", err)
-		}
-		n = UpdateFileName(n)
-		TemplateExecute(bs, n, model)
+		GenFile(n, model)
 	}
+}
+
+// Genfile 根据模板生成文件(模板和输出路径相同)
+func GenFile(filePath string, model interface{}) {
+	GenFileWithTargetPath(filePath, filePath, model)
+}
+
+// GenFile  根据模板生成文件(指定输出路径)
+func GenFileWithTargetPath(templatePath, targetPath string, model interface{}) {
+	log.Infof("start gen file %s", targetPath)
+	var (
+		bs  []byte
+		err error
+	)
+	if bs, err = Asset(templatePath); err != nil {
+		log.Fatalf("%s", err)
+	}
+	targetPath = UpdateFileName(targetPath)
+	TemplateExecute(bs, targetPath, model)
 }
 
 // MkDirIfNotExists 如果指定文件夹不存在则创建

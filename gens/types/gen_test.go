@@ -7,5 +7,5 @@ import (
 
 func TestGenTypes(t *testing.T) {
 	genutils.Asset = Asset
-	GenTypes("types.yaml")
+	Gen("types.yaml")
 }

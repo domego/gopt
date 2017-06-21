@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/lenbo-ma/ginpt/gens/funcs"
 	"github.com/lenbo-ma/gokits"
 	"github.com/lenbo-ma/gokits/log"
 
@@ -42,13 +44,33 @@ type ColumnInfo struct {
 
 // Gen gen
 func Gen(dbFile string) {
+	databaseDir := "model/" + genutils.Values["AppName"].(string)
+	dirs := []string{
+		"model/all",
+		databaseDir,
+	}
+	model := map[string]interface{}{
+		"Name":     genutils.Values["AppName"],
+		"RootPath": genutils.Values["RootPath"],
+	}
+	funcs.FuncMap["setDefault"] = SetDefault
+
+	// mkdirs
+	genutils.InitDirs(dirs)
+
 	dbs := parseDBFile(dbFile)
 	for _, v := range dbs {
 		db := v.(map[interface{}]interface{})
 		genSource(db)
-		loadDBMetaInfo(db)
+		loadDBMetaInfo(databaseDir, db)
 		log.Debugf("%v", db)
+		genutils.GenFileWithTargetPath("model/database/db.go.tmpl", databaseDir+"/gen_db.go", db)
 	}
+	model["DB"] = dbs
+	// gen model/all/all.go
+	//	log.Debugf("%v", model)
+	genutils.GenFile("model/all/all.go.tmpl", model)
+
 }
 
 // parseDBFile 解析出db配置文件信息
@@ -81,11 +103,12 @@ func genSource(db map[interface{}]interface{}) {
 }
 
 // loadDBMetaInfo 查询db元信息
-func loadDBMetaInfo(dbInfo map[interface{}]interface{}) {
+func loadDBMetaInfo(databaseDir string, dbInfo map[interface{}]interface{}) {
 	var (
 		db         *sql.DB
 		rows       *sql.Rows
 		err        error
+		tableMeta  interface{}
 		tableMetas []interface{}
 	)
 	source := dbInfo["Source"].(string)
@@ -106,7 +129,10 @@ func loadDBMetaInfo(dbInfo map[interface{}]interface{}) {
 		}
 		// 只加载配置的表
 		if tables == "*" || utils.IsInArray(genTablesArray, "rowName") {
-			tableMetas = append(tableMetas, loadTableMetaInfo(db, rowName, dbName))
+			tableMeta = loadTableMetaInfo(db, rowName, dbName)
+			model := tableMeta.(map[interface{}]interface{})
+			genutils.GenFileWithTargetPath("model/database/table.go.tmpl", databaseDir+"/gen_"+model["TableName"].(string)+".go", tableMeta)
+			tableMetas = append(tableMetas, tableMeta)
 		}
 	}
 	dbInfo["TableMetas"] = tableMetas
@@ -137,6 +163,7 @@ func loadTableMetaInfo(db *sql.DB, tableName, dbName string) interface{} {
 		if c.Null == "YES" {
 			c.Required = ""
 		}
+		log.Debugf("%v", c)
 		columnInfoList = append(columnInfoList, c)
 		if c.Key == "PRI" {
 			primaryKey = c.Field
@@ -148,6 +175,7 @@ func loadTableMetaInfo(db *sql.DB, tableName, dbName string) interface{} {
 		}
 	}
 	return map[interface{}]interface{}{
+		"DBName":          dbName,
 		"TableName":       tableName,
 		"PrimaryKey":      primaryKey,
 		"PrimaryKeyType":  primaryKeyType,
@@ -168,4 +196,43 @@ func toGoType(s, null string) string {
 	}
 	log.Fatalf("unsupport type %s", s)
 	return ""
+}
+
+func SetDefault(ci *ColumnInfo) string {
+	if ci.Default == nil {
+		return ""
+	}
+	if *ci.Default == "CURRENT_TIMESTAMP" {
+		return ""
+	}
+	if strings.Contains(ci.GoType, "string") && *ci.Default == "" {
+		return ""
+	}
+	if (strings.Contains(ci.GoType, "int") || strings.Contains(ci.GoType, "byte") || strings.Contains(ci.GoType, "float")) && !strings.Contains(ci.GoType, "*") && *ci.Default == "0" {
+		return ""
+	}
+	r := funcs.UpperCamel(ci.Field) + ": "
+	if ci.Null == "YES" {
+		if strings.Contains(ci.GoType, "Time") {
+			r += "utils.ToTime(\"2006-01-02 15:04:05\", \""
+		} else {
+			r += "utils." + funcs.CapitalizeFirst(ci.GoType[1:]) + "("
+		}
+
+	}
+	if strings.Contains(ci.GoType, "string") {
+		r += "\""
+	}
+	r += *ci.Default
+	if strings.Contains(ci.GoType, "string") {
+		r += "\""
+	}
+	if ci.Null == "YES" {
+		if strings.Contains(ci.GoType, "Time") {
+			r += "\""
+		}
+		r += ")"
+	}
+	r += ","
+	return r
 }

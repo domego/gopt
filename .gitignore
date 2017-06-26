@@ -17,3 +17,6 @@
 gen_types.go
 api/
 test/
+
+# vim swap
+*.swp

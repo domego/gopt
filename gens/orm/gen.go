@@ -54,6 +54,7 @@ func Gen(dbFile string) {
 		"RootPath": genutils.Values["RootPath"],
 	}
 	funcs.FuncMap["setDefault"] = SetDefault
+	funcs.FuncMap["getTableFieldNames"] = GetTableFieldNames
 
 	// mkdirs
 	genutils.InitDirs(dirs)
@@ -235,4 +236,12 @@ func SetDefault(ci *ColumnInfo) string {
 	}
 	r += ","
 	return r
+}
+
+func GetTableFieldNames(args []*ColumnInfo) string {
+	names := []string{}
+	for _, a := range args {
+		names = append(names, fmt.Sprintf("`%s`", a.Field))
+	}
+	return strings.Join(names, ", ")
 }

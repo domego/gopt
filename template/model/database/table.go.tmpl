@@ -101,3 +101,81 @@ func (obj *{{upperCamel .TableName}}) Insert() {
     panic(err)
   }
 }
+
+func Get{{upperCamel .TableName}}Where(cond string, args ...interface{}) []*{{upperCamel .TableName}} {
+  objs := []*{{upperCamel .TableName}}{}
+  database := GetDB()
+  _, err := database.Select(&objs, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE " + cond, args...)
+  if err != nil {
+    panic(err)
+  }
+  for _, obj := range objs {
+    obj.SetDBInfo()
+  }
+  return objs
+}
+
+func Get{{upperCamel .TableName}}Count(cond string, args ...interface{}) int64 {
+  database := GetDB()
+  cnt, err := database.SelectInt("SELECT count(1) FROM `{{.TableName}}` WHERE " + cond, args...)
+  if err != nil {
+    panic(err)
+  }
+  return cnt
+}
+
+func Get{{upperCamel .TableName}}First(cond string, args ...interface{})  *{{upperCamel .TableName}} {
+  obj := &{{upperCamel .TableName}}{}
+  database := GetDB()
+  err := database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE "+cond + " LIMIT 1", args...)
+  if err != nil {
+    if err.Error() == sql.ErrNoRows.Error() {
+      return nil
+    }
+    panic(err)
+  }
+  obj.SetDBInfo()
+  return obj
+}
+
+func Get{{upperCamel .TableName}}ByField(name string, field interface{}) *{{upperCamel .TableName}} {
+  obj := &{{upperCamel .TableName}}{}
+  database := GetDB()
+  err := database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE `" + name + "`=?", field)
+  if err != nil {
+    if err.Error() == sql.ErrNoRows.Error() {
+      return nil
+    }
+    panic(err)
+  }
+  obj.SetDBInfo()
+  return obj
+}
+
+func Get{{upperCamel .TableName}}ByFieldWithCondition(name, cond string, field interface{}) *{{upperCamel .TableName}} {
+  obj := &{{upperCamel .TableName}}{}
+  database := GetDB()
+  err := database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE `" + name + "`=? " + cond, field)
+  if err != nil {
+    if err.Error() == sql.ErrNoRows.Error() {
+      return nil
+    }
+    panic(err)
+  }
+  obj.SetDBInfo()
+  return obj
+}
+
+func Get{{upperCamel .TableName}}(key {{.PrimaryKeyType}}) *{{upperCamel .TableName}} {
+  obj := &{{upperCamel .TableName}}{}
+  database := GetDB()
+  err := database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE `{{.PrimaryKey}}`=?", key)
+  if err != nil {
+    if err.Error() == sql.ErrNoRows.Error() {
+      return nil
+    }
+    panic(err)
+  }
+  obj.SetDBInfo()
+  return obj
+}

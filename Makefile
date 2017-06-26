@@ -32,6 +32,12 @@ test_gen_orm: install
 	rm -rf test; mkdir test; cd test; \
 	ginpt gen_orm -orm=../db.yaml;
 
+test_gen_gin_controller: install
+	@echo "test gen_gin_controller"; \
+	rm -rf test; mkdir test; cd test; \
+	ginpt gen_gin_api -api=../api.yaml;
+
+
 # add echo to disable make error
 rebase:
 	git version

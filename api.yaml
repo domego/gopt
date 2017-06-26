@@ -1,0 +1,27 @@
+- Name: User
+  PackagePath: "controller/user"
+  Desc: "用户相关的controller"
+  RoutePrefix: "/test/user"
+  AllPost: true
+  Routes:
+    - Name: GetInfo
+      Desc: "获取用户信息"
+      Path: "/v1/get_info"
+      Method: "GET"
+      Arguments:
+        - "Id: string"
+      Result: User
+
+- Name: Role
+  PackagePath: "controller/role"
+  Desc: "角色相关的controller"
+  RoutePrefix: "/test/role"
+  AllPost: true
+  Routes:
+    - Name: GetInfo
+      Desc: "获取角色信息"
+      Path: "/v1/get_info"
+      Method: "GET"
+      Arguments:
+        - "Id: string"
+      Result: Role

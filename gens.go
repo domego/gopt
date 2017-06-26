@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/lenbo-ma/ginpt/gens/gincontroller"
 	"github.com/lenbo-ma/ginpt/gens/ginserver"
 	"github.com/lenbo-ma/ginpt/gens/orm"
 	"github.com/lenbo-ma/ginpt/gens/types"
@@ -27,4 +28,13 @@ func genORM(name, desc string) {
 		"RootPath": rootPath,
 	})
 	genorm.Gen(ormFile)
+}
+
+func genGinController(name, desc string) {
+	genutils.SetValues(map[string]interface{}{
+		"AppName":  appName,
+		"AppPort":  appPort,
+		"RootPath": rootPath,
+	})
+	gengincontroller.Gen(apiFile)
 }

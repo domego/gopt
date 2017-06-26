@@ -25,6 +25,7 @@ var (
 	appPort   int
 	typesFile string
 	ormFile   string
+	apiFile   string
 )
 
 var commandMap map[string]*Command
@@ -41,6 +42,7 @@ func init() {
 	// 初始化参数值
 	flag.StringVar(&typesFile, "types", "types.yaml", "types config file")
 	flag.StringVar(&ormFile, "orm", "db.yaml", "database config file")
+	flag.StringVar(&apiFile, "api", "api.yaml", "gin controller config file")
 	flag.StringVar(&appName, "name", "", "gin app name")
 	flag.IntVar(&appPort, "port", 0, "gin server port")
 }
@@ -54,6 +56,7 @@ func showHelp(name, desc string) {
 		[]string{
 			"-types\ttypes config file, default: types.yaml",
 			"-orm\tdatabase config file, default: db.yaml",
+			"-api\tgin controller config file, default: api.yaml",
 		}, nil)
 }
 
@@ -91,6 +94,11 @@ func initCommands() {
 			Name: "gen_orm",
 			Desc: "generate database orm code from template",
 			Func: genORM,
+		},
+		"gen_gin_api": &Command{
+			Name: "gen_gin_api",
+			Desc: "generate gin controller code from template",
+			Func: genGinController,
 		},
 	}
 }

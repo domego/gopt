@@ -40,6 +40,7 @@ func Gen(apiFile string) {
 }
 
 func genRouteGroup(group *GenControllerGroup) {
+	var outputPath string
 	if group.PackageName == "" {
 		group.PackageName = strings.ToLower(group.Name) + "controller"
 	}
@@ -48,14 +49,19 @@ func genRouteGroup(group *GenControllerGroup) {
 	}
 	genutils.MkDirIfNotExists(group.PackagePath)
 	genutils.GenFileWithTargetPath("controller/gen_controller.go.tmpl", group.PackagePath+"/gen_controller.go", group)
-	controllerPath := group.PackagePath + "/controller.go"
-	if _, err := os.Stat(controllerPath); os.IsNotExist(err) {
-		genutils.GenFileWithTargetPath("controller/controller.go.tmpl", controllerPath, group)
+	outputPath = group.PackagePath + "/controller.go"
+	if _, err := os.Stat(outputPath); os.IsNotExist(err) {
+		genutils.GenFileWithTargetPath("controller/controller.go.tmpl", outputPath, group)
 	} else {
-		log.Infof("%s is already exist.", controllerPath)
+		log.Infof("%s is already exist.", outputPath)
 	}
 
 	genutils.GenFileWithTargetPath("controller/gen_route.go.tmpl", group.PackagePath+"/gen_route.go", group)
-	genutils.GenFileWithTargetPath("controller/route.go.tmpl", group.PackagePath+"/route.go", group)
+	outputPath = group.PackagePath + "/route.go"
+	if _, err := os.Stat(outputPath); os.IsNotExist(err) {
+		genutils.GenFileWithTargetPath("controller/route.go.tmpl", outputPath, group)
+	} else {
+		log.Infof("%s is already exist.", outputPath)
+	}
 	sh.Command("gofmt", "-w", ".", sh.Dir(group.PackagePath)).Run()
 }

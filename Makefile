@@ -27,6 +27,10 @@ test_gen_types: install
 	rm -rf test; mkdir test; cd test; \
 	ginpt gen_types -types=../types.yaml;
 
+test_gen_orm: install
+	@echo "test gen_orm"; \
+	rm -rf test; mkdir test; cd test; \
+	ginpt gen_orm -orm=../db.yaml;
 
 # add echo to disable make error
 rebase:

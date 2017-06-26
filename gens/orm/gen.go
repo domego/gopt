@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	sh "github.com/codeskyblue/go-sh"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/lenbo-ma/ginpt/gens/common"
 	"github.com/lenbo-ma/ginpt/gens/funcs"
@@ -66,11 +67,14 @@ func Gen(dbFile string) {
 		loadDBMetaInfo(databaseDir, db)
 		log.Debugf("%v", db)
 		genutils.GenFileWithTargetPath("model/database/db.go.tmpl", databaseDir+"/gen_db.go", db)
+		sh.Command("gofmt", "-w", ".", sh.Dir(databaseDir)).Run()
 	}
 	model["DB"] = dbs
 	// gen model/all/all.go
 	//	log.Debugf("%v", model)
 	genutils.GenFile("model/all/all.go.tmpl", model)
+
+	sh.Command("gofmt", "-w", "model/all/all.go").Run()
 
 }
 

@@ -24,6 +24,7 @@ var (
 	appName   string
 	appPort   int
 	typesFile string
+	ormFile   string
 )
 
 var commandMap map[string]*Command
@@ -39,6 +40,7 @@ func init() {
 	genutils.Asset = Asset
 	// 初始化参数值
 	flag.StringVar(&typesFile, "types", "types.yaml", "types config file")
+	flag.StringVar(&ormFile, "orm", "db.yaml", "database config file")
 	flag.StringVar(&appName, "name", "", "gin app name")
 	flag.IntVar(&appPort, "port", 0, "gin server port")
 }
@@ -51,6 +53,7 @@ func showHelp(name, desc string) {
 	printHelp(fmt.Sprintf("Usage: %s <command> [options]", exec), commands,
 		[]string{
 			"-types\ttypes config file, default: types.yaml",
+			"-orm\tdatabase config file, default: db.yaml",
 		}, nil)
 }
 
@@ -83,6 +86,11 @@ func initCommands() {
 			Name: "gen_gin_server",
 			Desc: "generate gin server code from template",
 			Func: genGinServer,
+		},
+		"gen_orm": &Command{
+			Name: "gen_orm",
+			Desc: "generate database orm code from template",
+			Func: genORM,
 		},
 	}
 }
@@ -155,9 +163,13 @@ func parseRootDir() {
 }
 
 func main() {
-	flag.CommandLine.Parse(os.Args[2:])
-	initCommands()
 	parseRootDir()
+	initCommands()
+	if len(os.Args) < 2 {
+		showHelp("help", commandMap["help"].Desc)
+		return
+	}
+	flag.CommandLine.Parse(os.Args[2:])
 	if !checkArgs() {
 		return
 	}

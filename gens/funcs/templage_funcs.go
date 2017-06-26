@@ -18,6 +18,7 @@ var FuncMap = map[string]interface{}{
 	"contains":          contains,
 	"isEmpty":           IsEmpty,
 	"isNotEmpty":        IsNotEmpty,
+	"isNot":             IsNot,
 	"isBuildIn":         IsBuildIn,
 	"match":             match,
 	"incr":              incr,
@@ -242,4 +243,8 @@ func IsNotEmpty(val interface{}) bool {
 
 func IsBuildIn(t string) bool {
 	return t == "int" || t == "int32" || t == "int64" || t == "string" || t == "float32" || t == "float64" || t == "uint" || t == "uint32" || t == "uint64"
+}
+
+func IsNot(one, second string) bool {
+	return strings.ToLower(one) != second
 }

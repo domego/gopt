@@ -1,12 +1,18 @@
 // generate by ginpt
 package {{.PackageName}}
 {{ $groupName := upperCamel .Name }}
-import "github.com/gin-gonic/gin"
+{{ $allPost := .AllPost }}
+import (
+  "github.com/gin-gonic/gin"
+  "github.com/lenbo-ma/ginkit/middleware"
+)
 
 var {{$groupName}}RouteGroup *gin.RouterGroup
 func registRoute(route *gin.Engine) {
   {{$groupName}}RouteGroup = route.Group("{{.RoutePrefix}}")
-  {{range .Routes}}
-    {{$groupName}}RouteGroup.{{upper .Method}}("{{.Path}}", Do{{.Name}})
-  {{end}}
+  {{$groupName}}RouteGroup.Use(middleware.CommonHandler())
+  { {{range .Routes}}
+  {{$groupName}}RouteGroup.{{upper .Method}}("{{.Path}}", Do{{.Name}}) {{if $allPost}}{{ if isNot .Method "post"}}
+  {{$groupName}}RouteGroup.POST("{{.Path}}", Do{{.Name}}) {{end}}{{end}}{{end}}
+  }
 }

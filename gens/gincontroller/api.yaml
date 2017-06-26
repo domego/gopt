@@ -17,7 +17,6 @@
   PackagePath: "controller/role"
   Desc: "角色相关的controller"
   RoutePrefix: "/test/role"
-  AllPost: true
   Routes:
     - Name: GetInfo
       Desc: "获取角色信息"

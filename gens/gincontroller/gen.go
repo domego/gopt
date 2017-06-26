@@ -55,5 +55,7 @@ func genRouteGroup(group *GenControllerGroup) {
 		log.Infof("%s is already exist.", controllerPath)
 	}
 
+	genutils.GenFileWithTargetPath("controller/gen_route.go.tmpl", group.PackagePath+"/gen_route.go", group)
+	genutils.GenFileWithTargetPath("controller/route.go.tmpl", group.PackagePath+"/route.go", group)
 	sh.Command("gofmt", "-w", ".", sh.Dir(group.PackagePath)).Run()
 }

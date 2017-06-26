@@ -1,0 +1,12 @@
+// generate by ginpt
+package {{.PackageName}}
+{{ $groupName := upperCamel .Name }}
+import "github.com/gin-gonic/gin"
+
+var {{$groupName}}RouteGroup *gin.RouterGroup
+func registRoute(route *gin.Engine) {
+  {{$groupName}}RouteGroup = route.Group("{{.RoutePrefix}}")
+  {{range .Routes}}
+    {{$groupName}}RouteGroup.{{upper .Method}}("{{.Path}}", Do{{.Name}})
+  {{end}}
+}

@@ -10,6 +10,7 @@
       Method: "GET"
       Arguments:
         - "Id: string"
+        - "Age: int32, Default: 10, Optinal"
       Result: User
 
 - Name: Role

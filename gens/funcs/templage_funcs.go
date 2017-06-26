@@ -5,26 +5,40 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	"github.com/lenbo-ma/gokits/log"
 )
 
 var FuncMap = map[string]interface{}{
-	"capitalizeFirst": CapitalizeFirst,
-	"lowerFirst":      LowerFirst,
-	"camel":           Camel,
-	"upperCamel":      UpperCamel,
-	"underline":       Underline,
-	"contains":        contains,
-	"match":           match,
-	"incr":            incr,
-	"upper":           strings.ToUpper,
-	"lower":           strings.ToLower,
-	"toSortedMap":     ToSortedMap,
+	"capitalizeFirst":   CapitalizeFirst,
+	"lowerFirst":        LowerFirst,
+	"camel":             Camel,
+	"upperCamel":        UpperCamel,
+	"underline":         Underline,
+	"contains":          contains,
+	"isEmpty":           IsEmpty,
+	"isNotEmpty":        IsNotEmpty,
+	"isBuildIn":         IsBuildIn,
+	"match":             match,
+	"incr":              incr,
+	"upper":             strings.ToUpper,
+	"lower":             strings.ToLower,
+	"toSortedMap":       ToSortedMap,
+	"parseAPIArgument":  ParseAPIArgument,
+	"parseAPIArguments": ParseAPIArguments,
 
 	"isArray":        isArray,
 	"isBuiltIn":      isBuiltIn,
 	"isBuiltInArray": isBuiltInArray,
 	"hasPrefix":      strings.HasPrefix,
 	"nullableType":   nullableType,
+}
+
+type APIArgument struct {
+	Name     string
+	Type     string
+	Optional bool
+	Default  interface{}
 }
 
 func ToSortedMap(m interface{}) []MapItem {
@@ -154,4 +168,78 @@ func Underline(s string) string {
 		}
 	}
 	return LowerFirst(string(bs))
+}
+
+func ParseAPIArgument(s string) *APIArgument {
+	ss := strings.Split(s, ",")
+	r := &APIArgument{}
+	// nameType
+	nameType := strings.Trim(ss[0], " ")
+	nameTypeArray := strings.Split(nameType, ":")
+	r.Name = strings.Trim(nameTypeArray[0], " ")
+	r.Type = strings.Trim(nameTypeArray[1], " ")
+	// Optional
+	if strings.Contains(strings.ToLower(s), "optional") {
+		r.Optional = true
+	}
+	// defaultValue
+	if strings.Contains(strings.ToLower(s), "default:") {
+		default_idx := int32(strings.Index(strings.ToLower(s), "default:"))
+		default_val := strings.Split(s[default_idx+int32(len("default:")):], ",")
+		r.Default = default_val[0]
+	}
+	if strings.ToLower(r.Name) == "default" {
+		r.Name += "_"
+	}
+	log.Debugf("%v", r)
+	return r
+}
+
+func ParseAPIArguments(args []interface{}) []*APIArgument {
+	r := []*APIArgument{}
+	for _, arg := range args {
+		s := arg.(string)
+		r = append(r, ParseAPIArgument(s))
+	}
+	return r
+}
+
+// IsEmpty 判断是否为空
+func IsEmpty(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+	switch val.(type) {
+	case string:
+		return strings.TrimSpace(val.(string)) == ""
+	case byte:
+		return val == byte(0)
+	case int:
+		return val == int(0)
+	case int32:
+		return val == int32(0)
+	case int64:
+		return val == int64(0)
+	case uint:
+		return val == uint(0)
+	case uint32:
+		return val == uint32(0)
+	case uint64:
+		return val == uint64(0)
+	case float32:
+		return val == float32(0)
+	case float64:
+		return val == float64(0)
+
+	default:
+		return false
+	}
+}
+
+func IsNotEmpty(val interface{}) bool {
+	return !IsEmpty(val)
+}
+
+func IsBuildIn(t string) bool {
+	return t == "int" || t == "int32" || t == "int64" || t == "string" || t == "float32" || t == "float64" || t == "uint" || t == "uint32" || t == "uint64"
 }

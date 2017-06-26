@@ -65,7 +65,7 @@ func Gen(dbFile string) {
 		db := v.(map[interface{}]interface{})
 		genSource(db)
 		loadDBMetaInfo(databaseDir, db)
-		log.Debugf("%v", db)
+		// log.Debugf("%v", db)
 		genutils.GenFileWithTargetPath("model/database/db.go.tmpl", databaseDir+"/gen_db.go", db)
 		sh.Command("gofmt", "-w", ".", sh.Dir(databaseDir)).Run()
 	}
@@ -168,7 +168,7 @@ func loadTableMetaInfo(db *sql.DB, tableName, dbName string) interface{} {
 		if c.Null == "YES" {
 			c.Required = ""
 		}
-		log.Debugf("%v", c)
+		// log.Debugf("%v", c)
 		columnInfoList = append(columnInfoList, c)
 		if c.Key == "PRI" {
 			primaryKey = c.Field

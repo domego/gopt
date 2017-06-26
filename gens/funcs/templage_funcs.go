@@ -5,8 +5,6 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-
-	"github.com/lenbo-ma/gokits/log"
 )
 
 var FuncMap = map[string]interface{}{
@@ -192,7 +190,7 @@ func ParseAPIArgument(s string) *APIArgument {
 	if strings.ToLower(r.Name) == "default" {
 		r.Name += "_"
 	}
-	log.Debugf("%v", r)
+	// log.Debugf("%v", r)
 	return r
 }
 

@@ -1,5 +1,5 @@
 - Name: User
-  PackagePath: "controller/user"
+  PackagePath: "api/user"
   Desc: "用户相关的controller"
   RoutePrefix: "/test/user"
   AllPost: true

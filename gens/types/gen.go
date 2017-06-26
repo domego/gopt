@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	sh "github.com/codeskyblue/go-sh"
 	"github.com/lenbo-ma/ginpt/gens/common"
 	"github.com/lenbo-ma/gokits/log"
 	yaml "gopkg.in/yaml.v1"
@@ -39,5 +40,7 @@ func Gen(typesFile string) {
 		}
 		outputPath = fmt.Sprintf("%s/%s", g.PackagePath, outputPath)
 		genutils.TemplateExecute(bs, outputPath, g)
+
+		sh.Command("gofmt", "-w", outputPath).Run()
 	}
 }

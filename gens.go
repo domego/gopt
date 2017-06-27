@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/domego/gokits/log"
 	"github.com/domego/gopt/gens/common"
 	"github.com/domego/gopt/gens/gincontroller"
 	"github.com/domego/gopt/gens/ginserver"
@@ -36,5 +37,6 @@ func genGinController(name, desc string) {
 		"AppPort":  appPort,
 		"RootPath": rootPath,
 	})
+	log.Debugf("RootPath: %s", rootPath)
 	gengincontroller.Gen(apiFile)
 }

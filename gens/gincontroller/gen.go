@@ -37,6 +37,8 @@ func Gen(apiFile string) {
 	for _, group := range groups {
 		genRouteGroup(group)
 	}
+	genutils.GenFile("router.go.tmpl", map[string]interface{}{"Groups": groups, "RootPath": genutils.Values["RootPath"]})
+	sh.Command("gofmt", "-w", "router.go").Run()
 }
 
 func genRouteGroup(group *GenControllerGroup) {

@@ -1,6 +1,13 @@
+// generate by ginpt
 package main
-
-import "github.com/gin-gonic/gin"
+{{$rootPath := .RootPath}}
+import (
+  "github.com/gin-gonic/gin"
+{{if .Groups}}{{range .Groups}}
+  "{{$rootPath}}/{{.PackagePath}}" {{end}}{{end}}
+)
 
 func registRoute(route *gin.Engine) {
+{{if .Groups}}{{range .Groups}}
+  {{.PackageName}}.RegistRoute(route) {{end}}{{end}}
 }

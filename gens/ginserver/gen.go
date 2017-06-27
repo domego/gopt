@@ -10,6 +10,7 @@ func Gen() {
 	log.Infof("start gen_gin_server, name=%s, port=%d", genutils.Values["AppName"], genutils.Values["AppPort"])
 	dirs := []string{
 		"config",
+		"cfg",
 	}
 	cpFiles := []string{
 		"Makefile",
@@ -18,8 +19,8 @@ func Gen() {
 	}
 	files := []string{
 		"config/config.yaml",
+		"cfg/config.go.tmpl",
 		"app.go.tmpl",
-		"config.go.tmpl",
 		"main.go.tmpl",
 		"NAME",
 		"README.md",

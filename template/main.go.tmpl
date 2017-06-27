@@ -2,24 +2,23 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 	"syscall"
 
-	"github.com/domego/gokits/log"
+  "github.com/domego/gokits/log"
+  "{{.RootPath}}/cfg"
 )
 
 var (
-	cfg     *Config
+	conf     *cfg.Config
 	appName string
 	pid     int
 )
 
 var (
-	configFile  = "config/config.yaml"
 	pidFile     = "log/app.pid"
 	appNameFile = "NAME"
 )
@@ -43,21 +42,14 @@ func handleEnd() {
 }
 
 func handleReloadSignal() {
-	newConfig := readConfig(false)
-	if newConfig != nil {
-		log.Infof("%s: reload config", appName)
-		cfg = newConfig
-		reloadConfig()
-	}
+  cfg.Reload()
 }
 
 func main() {
 	flag.Parse()
 	writePid()
-	log.DefaultLogger.SetPrefix(fmt.Sprintf("[%d] [%s]", pid, appName))
 
-  cfg = readConfig(true)
-  reloadConfig()
+  conf = cfg.Init()
 	defer log.Infof("end")
 	handleApp()
 }

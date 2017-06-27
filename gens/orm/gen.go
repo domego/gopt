@@ -45,13 +45,11 @@ type ColumnInfo struct {
 
 // Gen gen
 func Gen(dbFile string) {
-	databaseDir := "model/" + genutils.Values["AppName"].(string)
+	var databaseDir string
 	dirs := []string{
 		"model/all",
-		databaseDir,
 	}
 	model := map[string]interface{}{
-		"Name":     genutils.Values["AppName"],
 		"RootPath": genutils.Values["RootPath"],
 	}
 	funcs.FuncMap["setDefault"] = SetDefault
@@ -64,6 +62,8 @@ func Gen(dbFile string) {
 	for _, v := range dbs {
 		db := v.(map[interface{}]interface{})
 		genSource(db)
+		databaseDir = "model/" + db["Name"].(string)
+		genutils.MkDirIfNotExists(databaseDir)
 		loadDBMetaInfo(databaseDir, db)
 		// log.Debugf("%v", db)
 		genutils.GenFileWithTargetPath("model/database/db.go.tmpl", databaseDir+"/gen_db.go", db)

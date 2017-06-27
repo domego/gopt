@@ -13,6 +13,7 @@ var _ = kits.RenderSuccess
 
 {{range .Routes}}
 type {{.Name}}Args struct {
+  BaseParam
   {{ if .Arguments }}
   {{range parseAPIArguments .Arguments}}
     {{.Name}} {{.Type}} `form:"{{underline .Name}}" json:"{{underline .Name}}"` {{end}}
@@ -21,8 +22,8 @@ type {{.Name}}Args struct {
 
 func Do{{.Name}}(c *gin.Context) {
   params := {{.Name}}Args{}
+  c.Bind(&params.BaseParam)
   {{if .Arguments}} c.Bind(&params)
-    log.Tracef("params: %+v", params)
     {{range parseAPIArguments .Arguments}}
       {{if isBuildIn .Type}}{{if not .Optional}}
         if utils.IsEmpty(params.{{.Name}}) {
@@ -37,6 +38,7 @@ func Do{{.Name}}(c *gin.Context) {
       {{end}}{{end}}
     {{end}}
   {{end}}
+  log.Tracef("params: %+v", params)
   do{{.Name}}(c, &params)
 }
 {{end}}

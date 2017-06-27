@@ -13,6 +13,8 @@ func Gen() {
 	}
 	cpFiles := []string{
 		"Makefile",
+		"fresh.conf",
+		".gitignore",
 	}
 	files := []string{
 		"config/config.yaml",

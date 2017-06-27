@@ -1,5 +1,5 @@
-# gpt
-gin 项目代码自动生成工具
+# gopt
+Golang 项目代码自动生成工具
 
 * Types
 * Proejct
@@ -7,7 +7,7 @@ gin 项目代码自动生成工具
 * Controller
 
 ```
-Usage: ginpt <command> [options]
+Usage: gopt <command> [options]
 
 Commands:
 

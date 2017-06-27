@@ -1,8 +1,8 @@
 package genginserver
 
 import (
+	"github.com/domego/gokits/log"
 	"github.com/lenbo-ma/ginpt/gens/common"
-	"github.com/lenbo-ma/gokits/log"
 )
 
 // Gen 执行GinServer生成程序

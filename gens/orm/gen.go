@@ -7,11 +7,11 @@ import (
 	"strings"
 
 	sh "github.com/codeskyblue/go-sh"
+	"github.com/domego/gokits"
+	"github.com/domego/gokits/log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/lenbo-ma/ginpt/gens/common"
 	"github.com/lenbo-ma/ginpt/gens/funcs"
-	"github.com/lenbo-ma/gokits"
-	"github.com/lenbo-ma/gokits/log"
 
 	yaml "gopkg.in/yaml.v1"
 )

@@ -22,6 +22,7 @@ type {{.Name}}Args struct {
 func Do{{.Name}}(c *gin.Context) {
   params := {{.Name}}Args{}
   {{if .Arguments}} c.Bind(&params)
+    log.Tracef("params: %+v", params)
     {{range parseAPIArguments .Arguments}}
       {{if isBuildIn .Type}}{{if not .Optional}}
         if utils.IsEmpty(params.{{.Name}}) {

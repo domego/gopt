@@ -7,8 +7,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/domego/gokits/log"
 	"github.com/lenbo-ma/ginpt/gens/funcs"
-	"github.com/lenbo-ma/gokits/log"
 )
 
 var (

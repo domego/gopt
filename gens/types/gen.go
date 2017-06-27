@@ -5,8 +5,8 @@ import (
 	"io/ioutil"
 
 	sh "github.com/codeskyblue/go-sh"
+	"github.com/domego/gokits/log"
 	"github.com/lenbo-ma/ginpt/gens/common"
-	"github.com/lenbo-ma/gokits/log"
 	yaml "gopkg.in/yaml.v1"
 )
 

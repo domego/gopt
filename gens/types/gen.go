@@ -6,7 +6,7 @@ import (
 
 	sh "github.com/codeskyblue/go-sh"
 	"github.com/domego/gokits/log"
-	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/domego/gopt/gens/common"
 	yaml "gopkg.in/yaml.v1"
 )
 

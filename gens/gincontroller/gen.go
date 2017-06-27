@@ -7,7 +7,7 @@ import (
 
 	sh "github.com/codeskyblue/go-sh"
 	"github.com/domego/gokits/log"
-	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/domego/gopt/gens/common"
 	yaml "gopkg.in/yaml.v1"
 )
 
@@ -23,7 +23,7 @@ type GenControllerGroup struct {
 
 // Gen 执行GenGinController生成程序
 func Gen(apiFile string) {
-	log.Infof("start gin_gin_controller, use %s", apiFile)
+	log.Infof("start gen_gin_controller, use %s", apiFile)
 	groups := []*GenControllerGroup{}
 	var bs []byte
 	var err error

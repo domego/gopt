@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/lenbo-ma/ginpt/gens/common"
-	"github.com/lenbo-ma/ginpt/gens/gincontroller"
-	"github.com/lenbo-ma/ginpt/gens/ginserver"
-	"github.com/lenbo-ma/ginpt/gens/orm"
-	"github.com/lenbo-ma/ginpt/gens/types"
+	"github.com/domego/gopt/gens/common"
+	"github.com/domego/gopt/gens/gincontroller"
+	"github.com/domego/gopt/gens/ginserver"
+	"github.com/domego/gopt/gens/orm"
+	"github.com/domego/gopt/gens/types"
 )
 
 func genTypes(name, desc string) {

@@ -9,9 +9,9 @@ import (
 	sh "github.com/codeskyblue/go-sh"
 	"github.com/domego/gokits"
 	"github.com/domego/gokits/log"
+	"github.com/domego/gopt/gens/common"
+	"github.com/domego/gopt/gens/funcs"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/lenbo-ma/ginpt/gens/common"
-	"github.com/lenbo-ma/ginpt/gens/funcs"
 
 	yaml "gopkg.in/yaml.v1"
 )

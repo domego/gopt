@@ -1,4 +1,4 @@
-NAME=gpt
+NAME=gopt
 COMMIT=`git rev-parse HEAD`
 ARCH=`uname | tr '[:upper:]' '[:lower:]'`
 CURRENT=$(shell git rev-parse --abbrev-ref HEAD)
@@ -19,23 +19,23 @@ build: bindata
 test_gen_gin_server: install
 	@echo "test gen_gin_server"; \
 	rm -rf test; mkdir test; cd test; \
-	ginpt gen_gin_server -name=testGinServer -port=9100; \
+	gopt gen_gin_server -name=testGinServer -port=9100; \
 	make; bin/testGinServer
 
 test_gen_types: install
 	@echo "test gen_types"; \
 	rm -rf test; mkdir test; cd test; \
-	ginpt gen_types -types=../types.yaml;
+	gopt gen_types -types=../types.yaml;
 
 test_gen_orm: install
 	@echo "test gen_orm"; \
 	rm -rf test; mkdir test; cd test; \
-	ginpt gen_orm -orm=../db.yaml;
+	gopt gen_orm -orm=../db.yaml;
 
 test_gen_gin_controller: install
 	@echo "test gen_gin_controller"; \
 	rm -rf test; mkdir test; cd test; \
-	ginpt gen_gin_api -api=../api.yaml;
+	gopt gen_gin_api -api=../api.yaml;
 
 
 # add echo to disable make error

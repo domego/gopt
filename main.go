@@ -7,11 +7,11 @@ import (
 	"strings"
 
 	"github.com/domego/gokits/log"
-	"github.com/lenbo-ma/ginpt/gens/common"
+	"github.com/domego/gopt/gens/common"
 )
 
 const (
-	exec    = "ginpt"
+	exec    = "gopt"
 	version = "1.0.0"
 )
 

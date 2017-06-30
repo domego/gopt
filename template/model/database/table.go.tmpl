@@ -102,6 +102,51 @@ func (obj *{{upperCamel .TableName}}) Insert() {
   }
 }
 
+func (obj *{{upperCamel .TableName}}) Update() {
+  var err error
+  database := obj.GetSqlExecutor()
+  {{ range .Columns }}
+    {{ if eq .Field "updated_at" }}
+      {{ if eq .Null "YES"}}
+        {{if eq .GoType "int32" }}
+          obj.{{upperCamel .Field}} = int32(model.UTC().Unix())
+        {{else}}
+          obj.{{upperCamel .Field}} = model.LocalTime()
+        {{end}}
+      {{else}}
+        {{if eq .GoType "int32" }}
+          obj.{{upperCamel .Field}} = int32(time.Now().Unix())
+        {{else}}
+          obj.{{upperCamel .Field}} = time.Now()
+        {{end}}
+      {{end}}
+    {{end}}
+  {{end}}
+  _, err = database.Update(obj)
+  if err != nil {
+    panic(err)
+  }
+}
+
+func (obj *{{upperCamel .TableName}}) Delete() {
+  {{ range .Columns }}
+    {{ if eq .Field "deleted" }}
+      {{ if eq .Null "YES"}}
+        {{if eq .GoType "*int32"}}
+          obj.Deleted = utils.Int32(1)
+        {{else if eq .GoType "*byte"}}
+          obj.Deleted = utils.Byte(1)
+        {{else}}
+          obj.Deleted = 1
+        {{end}}
+      {{else}}
+        obj.Deleted = 1
+      {{end}}
+      obj.Update()
+    {{end}}
+  {{end}}
+}
+
 func Get{{upperCamel .TableName}}Where(cond string, args ...interface{}) []*{{upperCamel .TableName}} {
   objs := []*{{upperCamel .TableName}}{}
   database := GetDB()

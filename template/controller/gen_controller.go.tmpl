@@ -10,6 +10,7 @@ import (
 
 var _ = log.Tracef
 var _ = kits.RenderSuccess
+var _ = utils.IsEmpty
 
 {{range .Routes}}
 type {{.Name}}Args struct {

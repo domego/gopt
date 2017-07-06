@@ -33,10 +33,11 @@ func Do{{.Name}}(c *gin.Context) {
            Message: "{{underline .Name}} is required",
           })
           return
-        } {{if isNotEmpty .Default}} else {
+        }{{end}} {{if .Optional}}{{if isNotEmpty .Default}}
+        if utils.IsEmpty(params.{{.Name}}) {
           params.{{.Name}} = {{.Default}}
-        } {{end}}
-      {{end}}{{end}}
+        } {{end}}{{end}}
+      {{end}}
     {{end}}
   {{end}}
   log.Tracef("params: %+v", params)

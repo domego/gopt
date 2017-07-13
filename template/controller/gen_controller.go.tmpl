@@ -40,7 +40,6 @@ func Do{{.Name}}(c *gin.Context) {
       {{end}}
     {{end}}
   {{end}}
-  log.Tracef("params: %+v", params)
   do{{.Name}}(c, &params)
 }
 {{end}}

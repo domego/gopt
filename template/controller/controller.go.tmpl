@@ -10,7 +10,7 @@ import (
 
 var _ = log.Tracef
 var _ = kits.RenderSuccess
-type BaseParam params.BaseParam
+type BaseParam paramkits.BaseParam
 
 {{range .Routes}}
 func do{{.Name}}(c *gin.Context, params *{{.Name}}Args) {

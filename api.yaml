@@ -3,6 +3,12 @@
   Desc: "用户相关的controller"
   RoutePrefix: "/test/user"
   AllPost: true
+  RouteImports:
+    - "controller/role"
+    - "controller/role1"
+  RouteHandlers:
+    - "role.xxx()"
+    - "role2.xxx()"
   Routes:
     - Name: GetInfo
       Desc: "获取用户信息"

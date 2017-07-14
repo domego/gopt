@@ -12,13 +12,15 @@ import (
 )
 
 type GenControllerGroup struct {
-	Name        string      `yaml:"Name"`
-	PackageName string      `yaml:"PackageName"`
-	PackagePath string      `yaml:"PackagePath"`
-	Desc        string      `yaml:"Desc"`
-	RoutePrefix string      `yaml:"RoutePrefix"`
-	AllPost     bool        `yaml:"AllPost"`
-	Routes      interface{} `yaml:"Routes"`
+	Name          string      `yaml:"Name"`
+	PackageName   string      `yaml:"PackageName"`
+	PackagePath   string      `yaml:"PackagePath"`
+	Desc          string      `yaml:"Desc"`
+	RoutePrefix   string      `yaml:"RoutePrefix"`
+	RouteImports  []string    `yaml:"RouteImports"`
+	RouteHandlers []string    `yaml:"RouteHandlers"`
+	AllPost       bool        `yaml:"AllPost"`
+	Routes        interface{} `yaml:"Routes"`
 }
 
 // Gen 执行GenGinController生成程序

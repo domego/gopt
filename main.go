@@ -26,6 +26,7 @@ var (
 	typesFile string
 	ormFile   string
 	apiFile   string
+	template  string
 )
 
 var commandMap map[string]*Command
@@ -44,6 +45,7 @@ func init() {
 	flag.StringVar(&ormFile, "orm", "db.yaml", "database config file")
 	flag.StringVar(&apiFile, "api", "api.yaml", "gin controller config file")
 	flag.StringVar(&appName, "name", "", "gin app name")
+	flag.StringVar(&template, "template", "vue", "api.js template")
 	flag.IntVar(&appPort, "port", 0, "gin server port")
 }
 
@@ -57,6 +59,7 @@ func showHelp(name, desc string) {
 			"-types\ttypes config file, default: types.yaml",
 			"-orm\tdatabase config file, default: db.yaml",
 			"-api\tgin controller config file, default: api.yaml",
+			"-template\tapi.js template, default: vue",
 		}, nil)
 }
 
@@ -99,6 +102,11 @@ func initCommands() {
 			Name: "gen_gin_api",
 			Desc: "generate gin controller code from template",
 			Func: genGinController,
+		},
+		"gen_js_api": &Command{
+			Name: "gen_js_api",
+			Desc: "generate api.js code from template",
+			Func: genJavascriptAPI,
 		},
 	}
 }

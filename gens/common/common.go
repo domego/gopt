@@ -11,6 +11,18 @@ import (
 	"github.com/domego/gopt/gens/funcs"
 )
 
+type GenControllerGroup struct {
+	Name          string      `yaml:"Name"`
+	PackageName   string      `yaml:"PackageName"`
+	PackagePath   string      `yaml:"PackagePath"`
+	Desc          string      `yaml:"Desc"`
+	RoutePrefix   string      `yaml:"RoutePrefix"`
+	RouteImports  []string    `yaml:"RouteImports"`
+	RouteHandlers []string    `yaml:"RouteHandlers"`
+	AllPost       bool        `yaml:"AllPost"`
+	Routes        interface{} `yaml:"Routes"`
+}
+
 var (
 	// Asset asset 用于读取二进制文件内容
 	Asset func(name string) ([]byte, error)

@@ -1,35 +1,22 @@
 - Name: User
-  PackagePath: "api/user"
+  PackagePath: "controller/user"
   Desc: "用户相关的controller"
   RoutePrefix: "/test/user"
   AllPost: true
-  RouteImports:
-    - "controller/role"
-    - "controller/role1"
-  RouteHandlers:
-    - "role.xxx()"
-    - "role2.xxx()"
   Routes:
-    - Name: Login
-      Desc: "获取用户信息"
-      Path: "/v1/login"
-      Method: "POST"
-      Arguments:
-        - "Id: string"
-      Result: null
     - Name: GetInfo
       Desc: "获取用户信息"
       Path: "/v1/get_info"
       Method: "GET"
       Arguments:
         - "Id: string"
+        - "Age: int32, Default: 10, Optinal"
       Result: User
 
 - Name: Role
   PackagePath: "controller/role"
   Desc: "角色相关的controller"
   RoutePrefix: "/test/role"
-  AllPost: true
   Routes:
     - Name: GetInfo
       Desc: "获取角色信息"

@@ -37,6 +37,12 @@ test_gen_gin_controller: install
 	rm -rf test; mkdir test; cd test; \
 	gopt gen_gin_api -api=../api.yaml;
 
+test_gen_js_api: install
+	@echo "test gen_js_api"; \
+	rm -rf test; mkdir test; cd test; \
+	gopt gen_js_api -api=../api.yaml;
+
+
 
 # add echo to disable make error
 rebase:

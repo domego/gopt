@@ -5,6 +5,7 @@ import (
 	"github.com/domego/gopt/gens/common"
 	"github.com/domego/gopt/gens/gincontroller"
 	"github.com/domego/gopt/gens/ginserver"
+	"github.com/domego/gopt/gens/jsapi"
 	"github.com/domego/gopt/gens/orm"
 	"github.com/domego/gopt/gens/types"
 )
@@ -39,4 +40,14 @@ func genGinController(name, desc string) {
 	})
 	log.Debugf("RootPath: %s", rootPath)
 	gengincontroller.Gen(apiFile)
+}
+
+func genJavascriptAPI(name, desc string) {
+	genutils.SetValues(map[string]interface{}{
+		"AppName":  appName,
+		"AppPort":  appPort,
+		"RootPath": rootPath,
+	})
+	log.Debugf("RootPath: %s", rootPath)
+	genjsapi.Gen(apiFile, template)
 }

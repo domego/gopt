@@ -6,9 +6,12 @@ const responseParse = response => {
   })
 }
 {{if .Groups}}{{range .Groups}}{{$pathPrefix := .RoutePrefix}}
-export class {{ .Name }} {{"{"}}{{if .Routes}}{{range .Routes}}
+// {{.Desc}}
+class {{ .Name }} {{"{"}}{{if .Routes}}{{range .Routes}}
+  // {{.Desc}}
   {{ camel .Name }} (data = {}) {{"{"}}{{ if contains .Method "GET" }}
     return Vue.http.get('{{$pathPrefix}}{{ .Path }}', { params: data }).then(responseParse){{ else }}
     return Vue.http.post('{{$pathPrefix}}{{ .Path }}', data).then(responseParse){{ end}}
   }{{end}}{{end}}
-}{{end}}{{end}}
+}
+export const {{camel .Name}} = new {{ .Name }}(){{end}}{{end}}

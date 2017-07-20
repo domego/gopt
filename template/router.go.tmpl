@@ -9,5 +9,6 @@ import (
 
 func registRoute(route *gin.Engine) {
 {{if .Groups}}{{range .Groups}}
+  // {{.Desc}}
   {{.PackageName}}.RegistRoute(route) {{end}}{{end}}
 }

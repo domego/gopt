@@ -13,7 +13,9 @@ var _ = kits.RenderSuccess
 var _ = utils.IsEmpty
 
 {{range .Routes}}
+// {{.Name}}Args {{.Desc}}请求参数
 type {{.Name}}Args struct {
+  // BaseParam 基础公共参数
   BaseParam
   {{ if .Arguments }}
   {{range parseAPIArguments .Arguments}}
@@ -21,6 +23,7 @@ type {{.Name}}Args struct {
   {{end}}
 }
 
+// Do{{.Name}} {{.Desc}}
 func Do{{.Name}}(c *gin.Context) {
   params := {{.Name}}Args{}
   c.Bind(&params.BaseParam)

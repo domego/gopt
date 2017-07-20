@@ -11,7 +11,7 @@
     - "role2.xxx()"
   Routes:
     - Name: Login
-      Desc: "获取用户信息"
+      Desc: "登录"
       Path: "/v1/login"
       Method: "POST"
       Arguments:

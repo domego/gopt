@@ -13,6 +13,7 @@ var _ = kits.RenderSuccess
 type BaseParam paramkits.BaseParam
 
 {{range .Routes}}
+// do{{.Name}} {{.Desc}}
 func do{{.Name}}(c *gin.Context, params *{{.Name}}Args) {
 }
 {{end}}

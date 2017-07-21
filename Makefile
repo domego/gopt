@@ -42,7 +42,10 @@ test_gen_js_api: install
 	rm -rf test; mkdir test; cd test; \
 	gopt gen_js_api -api=../api.yaml;
 
-
+test_gen_api_doc: install
+	@echo "test gen_api_do"; \
+	rm -rf test; mkdir test; cd test; \
+	gopt gen_api_doc -api=../api.yaml;
 
 # add echo to disable make error
 rebase:

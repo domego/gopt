@@ -22,9 +22,11 @@ var FuncMap = map[string]interface{}{
 	"incr":              incr,
 	"upper":             strings.ToUpper,
 	"lower":             strings.ToLower,
+	"trimSpace":         strings.TrimSpace,
 	"toSortedMap":       ToSortedMap,
 	"parseAPIArgument":  ParseAPIArgument,
 	"parseAPIArguments": ParseAPIArguments,
+	"inc":               Inc,
 
 	"isArray":        isArray,
 	"isBuiltIn":      isBuiltIn,
@@ -36,8 +38,13 @@ var FuncMap = map[string]interface{}{
 type APIArgument struct {
 	Name     string
 	Type     string
+	Describe string
 	Optional bool
 	Default  interface{}
+}
+
+func Inc(v int) int {
+	return v + 1
 }
 
 func ToSortedMap(m interface{}) []MapItem {
@@ -180,6 +187,12 @@ func ParseAPIArgument(s string) *APIArgument {
 	// Optional
 	if strings.Contains(strings.ToLower(s), "optional") {
 		r.Optional = true
+	}
+	// defaultValue
+	if strings.Contains(strings.ToLower(s), "describe:") {
+		desc_idx := int32(strings.Index(strings.ToLower(s), "describe:"))
+		desc_val := strings.Split(s[desc_idx+int32(len("describe:")):], ",")
+		r.Describe = desc_val[0]
 	}
 	// defaultValue
 	if strings.Contains(strings.ToLower(s), "default:") {

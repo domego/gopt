@@ -1,0 +1,17 @@
+## API接口说明 ##
+{{if .Groups}}{{range $i, $v := .Groups}}
+{{$groupName := $v.Name}}
+### {{inc $i}}. {{$v.Name}}({{$v.Desc}}) ###
+{{$pathPrefix := $v.RoutePrefix}}
+{{range $j, $v := .Routes}}
+#### {{inc $i}}.{{inc $j}}. {{$v.Name}}({{$v.Desc}}) ####
+
+* **JSAPI:** `{{camel $groupName}}.{{$v.Name}}`
+* **Path:** `{{$pathPrefix}}{{$v.Path}}`
+* **Method:** {{ if contains $v.Method "GET" }}`GET` or {{end}}`POST`
+* **Arguments:**{{if not $v.Arguments}}无{{end}}{{if $v.Arguments}}{{range parseAPIArguments $v.Arguments}}
+  * {{underline .Name}}: {{.Type}}{{if .Optional}},可选{{if isNotEmpty .Default}}(默认:{{trimSpace .Default}}){{end}}{{end}}{{if isNotEmpty .Describe}},字段说明:{{.Describe}}{{end}}{{end}}{{end}}
+
+ ----
+{{end}}
+{{end}}{{end}}

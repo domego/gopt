@@ -108,6 +108,11 @@ func initCommands() {
 			Desc: "generate api.js code from template",
 			Func: genJavascriptAPI,
 		},
+		"gen_api_doc": &Command{
+			Name: "gen_api_doc",
+			Desc: "generate api_doc document from template",
+			Func: genAPIDoc,
+		},
 	}
 }
 

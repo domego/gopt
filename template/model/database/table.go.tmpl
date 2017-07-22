@@ -9,7 +9,9 @@ import (
 
   "github.com/domego/gorp"
   "github.com/domego/ginkits/db"
+  "github.com/domego/ginkits/redis"
   "github.com/domego/gokits"
+  "github.com/domego/gokits/log"
 )
 
 var _ = time.Now
@@ -62,6 +64,24 @@ func (obj *{{upperCamel .TableName}}) GetSqlExecutor() gorp.SqlExecutor {
   return obj._db
 }
 
+func (obj *{{upperCamel .TableName}}) PrimaryCacheKey() string {
+  return fmt.Sprintf("{{underline .DBName}}:orm:{{.TableName}}:{{.PrimaryKey}}:%v", obj.{{upperCamel .PrimaryKey}})
+}
+
+func (obj *{{upperCamel .TableName}}) SaveToCache() error {
+  if RedisClient != nil {
+    return rediskits.SetModelToCache(RedisClient, obj.PrimaryCacheKey(), obj, DefaultCacheTTL)
+  }
+  return nil
+}
+
+func (obj *{{upperCamel .TableName}}) DeleteCache() error {
+  if RedisClient != nil {
+    return rediskits.DeleteCache(RedisClient, obj.PrimaryCacheKey(), 3)
+  }
+  return nil
+}
+
 func (obj *{{upperCamel .TableName}}) Insert() {
   database := obj.GetSqlExecutor()
   {{ range .Columns }}
@@ -100,6 +120,9 @@ func (obj *{{upperCamel .TableName}}) Insert() {
   if err != nil {
     panic(err)
   }
+  if err = obj.SaveToCache(); err != nil {
+    log.Errorf("[CacheKey:%s], %s", obj.PrimaryCacheKey(), err)
+  }
 }
 
 func (obj *{{upperCamel .TableName}}) Update() {
@@ -125,6 +148,9 @@ func (obj *{{upperCamel .TableName}}) Update() {
   _, err = database.Update(obj)
   if err != nil {
     panic(err)
+  }
+  if err = obj.SaveToCache(); err != nil {
+    log.Errorf("[CacheKey:%s], %s", obj.PrimaryCacheKey(), err)
   }
 }
 
@@ -213,13 +239,26 @@ func Get{{upperCamel .TableName}}ByFieldWithCondition(name, cond string, field i
 
 func Get{{upperCamel .TableName}}(key {{.PrimaryKeyType}}) *{{upperCamel .TableName}} {
   obj := &{{upperCamel .TableName}}{}
-  database := GetDB()
-  err := database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE `{{.PrimaryKey}}`=?", key)
-  if err != nil {
-    if err.Error() == sql.ErrNoRows.Error() {
-      return nil
+  var notFound = true
+  var err error
+  if RedisClient != nil {
+    obj.{{upperCamel .PrimaryKey}} = key
+    notFound = rediskits.GetCacheToModel(RedisClient, obj.PrimaryCacheKey(), obj)
+  }
+  if notFound {
+    database := GetDB()
+    err = database.SelectOne(obj, "SELECT {{getTableFieldNames .Columns}} FROM `{{.TableName}}` WHERE `{{.PrimaryKey}}`=?", key)
+    if err != nil {
+      if err.Error() == sql.ErrNoRows.Error() {
+        return nil
+      }
+      panic(err)
     }
-    panic(err)
+   }
+  if notFound && RedisClient != nil {
+    if err = obj.SaveToCache(); err != nil {
+      log.Errorf("[CacheKey:%s], %s", obj.PrimaryCacheKey(), err)
+    }
   }
   obj.SetDBInfo()
   return obj

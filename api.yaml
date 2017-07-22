@@ -17,7 +17,7 @@
       Arguments:
         - "Id: string"
         - "Username: string, Optional, Desc: 登录帐号, Default: \"debug\""
-      Result: null
+      Result: nil
     - Name: GetInfo
       Desc: "获取用户信息"
       Path: "/v1/get_info"

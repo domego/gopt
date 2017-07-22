@@ -8,11 +8,15 @@ import (
 	"github.com/domego/gorp"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/domego/gokits/log"
-	"github.com/domego/ginkits/db"
+  "github.com/domego/ginkits/db"
+  "gopkg.in/redis.v3"
 )
 
 var (
-	DBConfig *db.DBConfig
+  DBConfig *db.DBConfig
+  RedisClient *redis.Client
+  // DefaultCacheTTL 默认CACHE时间1天
+  DefaultCacheTTL = 24 * 60 * 60
 
 	dbInfo		*db.DBInfo
 	serialDBInfo	*db.DBInfo

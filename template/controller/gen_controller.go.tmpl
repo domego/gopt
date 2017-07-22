@@ -43,6 +43,13 @@ func Do{{.Name}}(c *gin.Context) {
       {{end}}
     {{end}}
   {{end}}
-  do{{.Name}}(c, &params)
+  {{if isEmpty .Result}}do{{.Name}}(c, &params){{end}}
+  {{if isNotEmpty  .Result}}
+  result, hasError := do{{.Name}}(c, &params)
+  if hasError {
+    kits.RenderError(c, result)
+    return
+  }
+  kits.RenderSuccess(c, result){{end}}
 }
 {{end}}

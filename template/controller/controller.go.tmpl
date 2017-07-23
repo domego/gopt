@@ -15,6 +15,6 @@ type BaseParam paramkits.BaseParam
 {{range .Routes}}
 // do{{.Name}} {{.Desc}}
 func do{{.Name}}(c *gin.Context, params *{{.Name}}Args) {{if isNotEmpty .Result}}(result interface{}, hasError bool){{end}}{
-  {{if .isNotEmpty .Result}}return{{end}}
+  {{if isNotEmpty .Result}}return{{end}}
 }
 {{end}}

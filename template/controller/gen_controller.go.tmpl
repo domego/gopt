@@ -1,7 +1,10 @@
 // generate by ginpt
 package {{.PackageName}}
+{{$groupName := .Name}}
 
 import (
+  "fmt"
+
   "github.com/gin-gonic/gin"
   "github.com/domego/ginkits"
   "github.com/domego/gokits"
@@ -11,12 +14,15 @@ import (
 var _ = log.Tracef
 var _ = kits.RenderSuccess
 var _ = utils.IsEmpty
+var _ = fmt.Sprintf
 
 {{range .Routes}}
 // {{.Name}}Args {{.Desc}}请求参数
 type {{.Name}}Args struct {
   // BaseParam 基础公共参数
   BaseParam
+  CacheAPIKey     string
+  CacheArguments  []string
   {{ if .Arguments }}
   {{range parseAPIArguments .Arguments}}
     {{.Name}} {{.Type}} `form:"{{underline .Name}}" json:"{{underline .Name}}"` {{end}}
@@ -25,11 +31,13 @@ type {{.Name}}Args struct {
 
 // Do{{.Name}} {{.Desc}}
 func Do{{.Name}}(c *gin.Context) {
-  params := {{.Name}}Args{}
+  params := {{.Name}}Args{
+    CacheAPIKey: "{{underline $groupName}}:{{underline .Name}}",
+  }
   c.Bind(&params.BaseParam)
   {{if .Arguments}} c.Bind(&params)
-    {{range parseAPIArguments .Arguments}}
-      {{if isBuildIn .Type}}{{if not .Optional}}
+
+  { {{range parseAPIArguments .Arguments}}{{if isBuildIn .Type}}{{if not .Optional}}
         if utils.IsEmpty(params.{{.Name}}) {
           kits.RenderError(c, &kits.RespErrorMessage{
            Code: kits.ErrorCodeArgumentLack,
@@ -39,12 +47,16 @@ func Do{{.Name}}(c *gin.Context) {
         }{{end}} {{if .Optional}}{{if isNotEmpty .Default}}
         if utils.IsEmpty(params.{{.Name}}) {
           params.{{.Name}} = {{.Default}}
-        } {{end}}{{end}}
-      {{end}}
-    {{end}}
+        } {{end}}{{end}}{{end}}
+  {{end}}}
+
+  {{end}}
+  {{if .CacheArguments}}{ {{range .CacheArguments}}
+    params.CacheArguments = append(params.CacheArguments, fmt.Sprintf("%v", params.{{.}})){{end}}
+  }
   {{end}}
   {{if isEmpty .Result}}do{{.Name}}(c, &params){{end}}
-  {{if isNotEmpty  .Result}}
+  {{if isNotEmpty .Result}}
   result, hasError := do{{.Name}}(c, &params)
   if hasError {
     kits.RenderError(c, result)

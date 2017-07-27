@@ -7,6 +7,7 @@ import (
 
   "github.com/gin-gonic/gin"
   "github.com/domego/ginkits"
+  "github.com/domego/ginkits/params"
   "github.com/domego/gokits"
   "github.com/domego/gokits/log"
 )
@@ -21,6 +22,7 @@ var _ = fmt.Sprintf
 type {{.Name}}Args struct {
   // BaseParam 基础公共参数
   BaseParam
+  ClientInfo      paramkits.ClientInfo
   CacheAPIKey     string
   CacheArguments  []string
   {{ if .Arguments }}
@@ -35,6 +37,7 @@ func Do{{.Name}}(c *gin.Context) {
     CacheAPIKey: "{{underline $groupName}}:{{underline .Name}}",
   }
   c.Bind(&params.BaseParam)
+  params.ClientInfo = paramkits.ParseClientInfo(c)
   {{if .Arguments}} c.Bind(&params)
 
   { {{range parseAPIArguments .Arguments}}{{if isBuildIn .Type}}{{if not .Optional}}

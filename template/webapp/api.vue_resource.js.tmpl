@@ -1,17 +1,26 @@
 import Vue from 'vue'
+import { message } from 'element-ui'
+
+const errHandler = () => {
+  message.error('网络出错！')
+}
 
 const responseParse = response => {
   return response.json().then(json => {
+    if (!json.success && json.error && json.error.content) {
+      message.error(json.error.content)
+    }
     return Promise.resolve(json)
   })
 }
+
 {{if .Groups}}{{range .Groups}}{{$pathPrefix := .RoutePrefix}}
 // {{.Desc}}
 class {{ .Name }} {{"{"}}{{if .Routes}}{{range .Routes}}
   // {{.Desc}}
   {{ camel .Name }} (data = {}) {{"{"}}{{ if contains .Method "GET" }}
-    return Vue.http.get('{{$pathPrefix}}{{ .Path }}', { params: data }).then(responseParse){{ else }}
-    return Vue.http.post('{{$pathPrefix}}{{ .Path }}', data).then(responseParse){{ end}}
+    return Vue.http.get('{{$pathPrefix}}{{ .Path }}', { params: data }).then(responseParse).catch(errHandler){{ else }}
+    return Vue.http.post('{{$pathPrefix}}{{ .Path }}', data).then(responseParse).catch(errHandler){{ end}}
   }{{end}}{{end}}
 }
 export const {{camel .Name}} = new {{ .Name }}(){{end}}{{end}}

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { message } from 'element-ui'
+import {message} from 'element-ui'
 
 const errHandler = () => {
   message.error('网络出错！')
@@ -13,7 +13,6 @@ const responseParse = response => {
     return Promise.resolve(json)
   })
 }
-
 {{if .Groups}}{{range .Groups}}{{$pathPrefix := .RoutePrefix}}
 // {{.Desc}}
 class {{ .Name }} {{"{"}}{{if .Routes}}{{range .Routes}}

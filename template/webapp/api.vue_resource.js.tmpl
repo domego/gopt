@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import {message} from 'element-ui'
 
-const errHandler = () => {
+const errHandler = (res) => {
   message.error('网络出错！')
+  return Promise.reject(res)
 }
 
 const responseParse = response => {

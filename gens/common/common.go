@@ -7,6 +7,7 @@ import (
 	"strings"
 	"text/template"
 
+	sh "github.com/codeskyblue/go-sh"
 	"github.com/domego/gokits/log"
 	"github.com/domego/gopt/gens/funcs"
 )
@@ -143,4 +144,8 @@ func UpdateFileName(n string) string {
 		return strings.Replace(n, ".tmpl", "", 1)
 	}
 	return n
+}
+
+func Chmod() {
+	sh.Command("find", ".", "-name", "*.sh").Command("xargs", "chmod", "a+x").Run()
 }

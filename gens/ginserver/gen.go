@@ -42,4 +42,5 @@ func Gen() {
 	genutils.CopyFiles(cpFiles)
 	// generate files
 	genutils.GenFiles(files, model)
+	genutils.Chmod()
 }

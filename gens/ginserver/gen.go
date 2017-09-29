@@ -9,6 +9,7 @@ import (
 func Gen() {
 	log.Infof("start gen_gin_server, name=%s, port=%d", genutils.Values["AppName"], genutils.Values["AppPort"])
 	dirs := []string{
+		"bin",
 		"config",
 		"cfg",
 	}
@@ -20,10 +21,13 @@ func Gen() {
 	files := []string{
 		"config/config.yaml",
 		"cfg/config.go.tmpl",
+		"bin/daemonize-darwin",
+		"bin/daemonize-linux",
 		"app.go.tmpl",
 		"main.go.tmpl",
 		"NAME",
 		"README.md",
+		"service.sh",
 		"router.go.tmpl",
 	}
 	model := map[string]interface{}{

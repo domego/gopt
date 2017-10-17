@@ -15,7 +15,7 @@ func RegistRoute(route *gin.Engine) {
   {{$groupName}}RouteGroup.Use(middleware.CommonHandler(),{{range .RouteHandlers}}{{.}},{{end}})
   { {{range .Routes}}
     // {{.Desc}}
-    {{$groupName}}RouteGroup.{{upper .Method}}("{{.Path}}", Do{{.Name}}) {{if $allPost}}{{ if isNot .Method "post"}}
-    {{$groupName}}RouteGroup.POST("{{.Path}}", Do{{.Name}}) {{end}}{{end}}{{end}}
+    {{$groupName}}RouteGroup.{{upper .Method}}("{{.Path}}",{{range .Handlers}}{{.}},{{end}} Do{{.Name}}){{if $allPost}}{{ if isNot .Method "post"}}
+    {{$groupName}}RouteGroup.POST("{{.Path}}",{{range .Handlers}}{{.}},{{end}} Do{{.Name}}){{end}}{{end}}{{end}}
   }
 }

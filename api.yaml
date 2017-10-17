@@ -14,6 +14,9 @@
       Desc: "登录"
       Path: "/v1/login"
       Method: "POST"
+      Handlers:
+        - "middleware.AccessHandler()"
+        - "middleware.SignHandler()"
       Arguments:
         - "Id: string"
         - "Username: string, Optional, Desc: 登录帐号, Default: \"debug\""

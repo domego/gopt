@@ -1,0 +1,26 @@
+- Package: errors
+  Path: "errors"
+  Errors:
+    InvalidURL:
+      Code: 111
+      Message: "无效的参数"
+      Title: "查询失败"
+      Content: "网络不给力"
+    InvalidURLII:
+      Code: 111
+      Message: "无效的参数"
+      Title: "查询失败"
+      Content: "网络不给力"
+- Package: errors2
+  Path: "errors2"
+  Errors:
+    InvalidURLL:
+      Code: 111
+      Message: "无效的参数"
+      Title: "查询失败"
+      Content: "网络不给力"
+    InvalidURLU:
+      Code: 111
+      Message: "无效的参数"
+      Title: "查询失败"
+      Content: "网络不给力"

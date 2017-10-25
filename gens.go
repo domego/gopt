@@ -4,6 +4,7 @@ import (
 	"github.com/domego/gokits/log"
 	"github.com/domego/gopt/gens/apidoc"
 	"github.com/domego/gopt/gens/common"
+	"github.com/domego/gopt/gens/errors"
 	"github.com/domego/gopt/gens/gincontroller"
 	"github.com/domego/gopt/gens/ginserver"
 	"github.com/domego/gopt/gens/jsapi"
@@ -13,6 +14,10 @@ import (
 
 func genTypes(name, desc string) {
 	gentypes.Gen(typesFile)
+}
+
+func genErrors(name, desc string) {
+	generrors.Gen(errorsFile)
 }
 
 func genGinServer(name, desc string) {

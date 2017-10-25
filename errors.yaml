@@ -1,0 +1,8 @@
+- Package: errors
+  Path: "errors"
+  Errors:
+    InvalidURL:
+      Code: 111
+      Message: "无效的参数"
+      Title: "查询失败"
+      Content: "网络不给力"

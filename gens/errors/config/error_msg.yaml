@@ -1,0 +1,21 @@
+
+ErrorInvalidURL
+  code: 111
+  content: 网络不给力
+  message: 无效的参数
+  title: 查询失败
+ErrorInvalidURLII
+  code: 111
+  content: 网络不给力
+  message: 无效的参数
+  title: 查询失败
+ErrorInvalidURLL
+  code: 111
+  content: 网络不给力
+  message: 无效的参数
+  title: 查询失败
+ErrorInvalidURLU
+  code: 111
+  content: 网络不给力
+  message: 无效的参数
+  title: 查询失败

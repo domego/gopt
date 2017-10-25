@@ -21,12 +21,13 @@ var (
 )
 
 var (
-	appName   string
-	appPort   int
-	typesFile string
-	ormFile   string
-	apiFile   string
-	template  string
+	appName    string
+	appPort    int
+	typesFile  string
+	errorsFile string
+	ormFile    string
+	apiFile    string
+	template   string
 )
 
 var commandMap map[string]*Command
@@ -41,6 +42,7 @@ type Command struct {
 func init() {
 	genutils.Asset = Asset
 	// 初始化参数值
+	flag.StringVar(&errorsFile, "errors", "errors.yaml", "errors config file")
 	flag.StringVar(&typesFile, "types", "types.yaml", "types config file")
 	flag.StringVar(&ormFile, "orm", "db.yaml", "database config file")
 	flag.StringVar(&apiFile, "api", "api.yaml", "gin controller config file")
@@ -56,6 +58,7 @@ func showHelp(name, desc string) {
 	}
 	printHelp(fmt.Sprintf("Usage: %s <command> [options]", exec), commands,
 		[]string{
+			"-errors\terrors config file, default: errors.yaml",
 			"-types\ttypes config file, default: types.yaml",
 			"-orm\tdatabase config file, default: db.yaml",
 			"-api\tgin controller config file, default: api.yaml",
@@ -87,6 +90,11 @@ func initCommands() {
 			Name: "gen_types",
 			Desc: "generate structs code from yaml config file",
 			Func: genTypes,
+		},
+		"gen_errors": &Command{
+			Name: "gen_errors",
+			Desc: "generate structs code from yaml config file",
+			Func: genErrors,
 		},
 		"gen_gin_server": &Command{
 			Name: "gen_gin_server",

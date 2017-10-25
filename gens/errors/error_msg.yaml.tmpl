@@ -1,0 +1,4 @@
+{{range .Groups}}{{range $v := toSortedMap .Errors}}
+Error{$v.Key }}{{range $v1 := toSortedMap $v.Value }}
+  {{lower $v1.Key}}:{{$v1.Value}}
+{{end}}{{end}}

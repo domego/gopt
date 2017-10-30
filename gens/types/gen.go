@@ -13,6 +13,7 @@ import (
 type GenTypeGroup struct {
 	Package     string      `yaml:"Package"`
 	PackagePath string      `yaml:"Path"`
+	Imports     []string    `yaml:"Imports"`
 	Types       interface{} `yaml:"Types"`
 }
 

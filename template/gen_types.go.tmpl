@@ -3,6 +3,8 @@ package {{.Package}}
 
 import (
   "time"
+  {{range .Imports}}
+  "{{.}}"{{end}}
 )
 
 var _ = time.Now

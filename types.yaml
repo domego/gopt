@@ -10,11 +10,10 @@
 
 - Package: api
   Path: "api"
+  Imports:
+    - "main"
   Types:
-    Image:
-      Url: string
-      Width: int32
-      Height: int32
     UserInfo:
       Name: string
       Age: int32
+      Avatar: main.Image

@@ -36,9 +36,9 @@ func Do{{.Name}}(c *gin.Context) {
   params := {{.Name}}Args{
     CacheAPIKey: "{{underline $groupName}}:{{underline .Name}}",
   }
-  c.Bind(&params.BaseParam)
+  c.ShouldBindQuery(&params.BaseParam)
   params.ClientInfo = paramkits.ParseClientInfo(c)
-  {{if .Arguments}} c.Bind(&params)
+  {{if .Arguments}} c.ShouldBind(&params)
 
   { {{range parseAPIArguments .Arguments}}{{if isBuildIn .Type}}{{if not .Optional}}
         if utils.IsEmpty(params.{{.Name}}) {

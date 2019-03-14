@@ -87,14 +87,14 @@ func (obj *{{upperCamel .TableName}}) Insert() {
   {{ range .Columns }}
     {{ if eq .Field "created_at" }}
       {{ if eq .Null "YES"}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(utils.GetUTCTime().Unix())
+        {{if eq .GoType "*int64" }}
+          obj.{{upperCamel .Field}} = utils.Int64(utils.GetUTCTime().Unix())
         {{else}}
           obj.{{upperCamel .Field}} = utils.GetLocalTime()
         {{end}}
       {{else}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(utils.GetUTCTime().Unix())
+        {{if eq .GoType "int64" }}
+          obj.{{upperCamel .Field}} = utils.GetUTCTime().Unix()
         {{else}}
           obj.{{upperCamel .Field}} = time.Now()
         {{end}}
@@ -102,14 +102,14 @@ func (obj *{{upperCamel .TableName}}) Insert() {
     {{end}}
     {{ if eq .Field "updated_at" }}
       {{ if eq .Null "YES"}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(utils.GetUTCTime().Unix())
+        {{if eq .GoType "*int64" }}
+          obj.{{upperCamel .Field}} = utils.Int64(utils.GetUTCTime().Unix())
         {{else}}
           obj.{{upperCamel .Field}} = utils.GetLocalTime()
         {{end}}
       {{else}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(utils.GetUTCTime().Unix())
+        {{if eq .GoType "int64" }}
+          obj.{{upperCamel .Field}} = utils.GetUTCTime().Unix())
         {{else}}
           obj.{{upperCamel .Field}} = time.Now()
         {{end}}
@@ -131,14 +131,14 @@ func (obj *{{upperCamel .TableName}}) Update() {
   {{ range .Columns }}
     {{ if eq .Field "updated_at" }}
       {{ if eq .Null "YES"}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(model.UTC().Unix())
+        {{if eq .GoType "*int64" }}
+          obj.{{upperCamel .Field}} = utils.Int64(utils.GetUTCTime().Unix())
         {{else}}
           obj.{{upperCamel .Field}} = model.LocalTime()
         {{end}}
       {{else}}
-        {{if eq .GoType "int32" }}
-          obj.{{upperCamel .Field}} = int32(time.Now().Unix())
+        {{if eq .GoType "int64" }}
+          obj.{{upperCamel .Field}} = time.Now().Unix()
         {{else}}
           obj.{{upperCamel .Field}} = time.Now()
         {{end}}
@@ -158,15 +158,21 @@ func (obj *{{upperCamel .TableName}}) Delete() {
   {{ range .Columns }}
     {{ if eq .Field "deleted" }}
       {{ if eq .Null "YES"}}
-        {{if eq .GoType "*int32"}}
-          obj.Deleted = utils.Int32(1)
+        {{if eq .GoType "*int64"}}
+          obj.Deleted = utils.Int64(utils.GetUTCTime().Unix())
         {{else if eq .GoType "*byte"}}
-          obj.Deleted = utils.Byte(1)
+          obj.Deleted = utils.Byte(utils.Byte(1))
         {{else}}
           obj.Deleted = 1
         {{end}}
       {{else}}
-        obj.Deleted = 1
+        {{if eq .GoType "int64"}}
+          obj.Deleted = utils.GetUTCTime().Unix()
+        {{else if eq .GoType "byte"}}
+          obj.Deleted = utils.Byte(1)
+        {{else}}
+          obj.Deleted = 1
+        {{end}}
       {{end}}
       obj.Update()
     {{end}}

@@ -1,7 +1,7 @@
 - Name: example
   Database: example
   Username: root
-  Password: "123456"
+  Password: "12345678"
   Host: 127.0.0.1
   Port: 3306
   Table: "*"

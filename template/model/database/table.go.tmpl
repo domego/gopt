@@ -159,19 +159,19 @@ func (obj *{{upperCamel .TableName}}) Delete() {
     {{ if or (eq .Field "deleted") (eq .Field "deleted_ts") (eq .Field "deleted_at") }}
       {{ if eq .Null "YES"}}
         {{if eq .GoType "*int64"}}
-          obj.Deleted = utils.Int64(utils.GetUTCTime().Unix())
+          obj.{{upperCamel .Field}} = utils.Int64(utils.GetUTCTime().Unix())
         {{else if eq .GoType "*byte"}}
-          obj.Deleted = utils.Byte(utils.Byte(1))
+          obj.{{upperCamel .Field}} = utils.Byte(utils.Byte(1))
         {{else}}
-          obj.Deleted = 1
+          obj.{{upperCamel .Field}} = 1
         {{end}}
       {{else}}
         {{if eq .GoType "int64"}}
-          obj.Deleted = utils.GetUTCTime().Unix()
+          obj.{{upperCamel .Field}} = utils.GetUTCTime().Unix()
         {{else if eq .GoType "byte"}}
-          obj.Deleted = utils.Byte(1)
+          obj.{{upperCamel .Field}} = utils.Byte(1)
         {{else}}
-          obj.Deleted = 1
+          obj.{{upperCamel .Field}} = 1
         {{end}}
       {{end}}
       obj.Update()

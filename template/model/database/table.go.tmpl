@@ -156,7 +156,7 @@ func (obj *{{upperCamel .TableName}}) Update() {
 
 func (obj *{{upperCamel .TableName}}) Delete() {
   {{ range .Columns }}
-    {{ if or (eq .Field "deleted") (eq .Field "deleted_ts") }}
+    {{ if or (eq .Field "deleted") (eq .Field "deleted_ts") (eq .Field "deleted_at") }}
       {{ if eq .Null "YES"}}
         {{if eq .GoType "*int64"}}
           obj.Deleted = utils.Int64(utils.GetUTCTime().Unix())
